@@ -1,0 +1,81 @@
+{
+  "receitasDoces": [
+    {
+      "id": 1,
+      "titulo": "Bolo de Chocolate",
+      "descricao": "Bolo fofinho de chocolate",
+      "ingredientes": ["Farinha", "Ovos", "Chocolate em pó", "Açúcar", "Leite"],
+      "modoPreparo": "Misture tudo e asse por 40 minutos.",
+      "categoria": "doce"
+    },
+    {
+      "id": 2,
+      "titulo": "Brigadeiro",
+      "descricao": "Docinho tradicional brasileiro",
+      "ingredientes": ["Leite condensado", "Chocolate em pó", "Manteiga"],
+      "modoPreparo": "Cozinhe até desgrudar da panela.",
+      "categoria": "doce"
+    },
+    {
+      "id": 3,
+      "titulo": "Pudim de Leite",
+      "descricao": "Pudim tradicional de leite condensado",
+      "ingredientes": ["Leite condensado", "Leite", "Ovos", "Açúcar"],
+      "modoPreparo": "Bata tudo, asse em banho-maria.",
+      "categoria": "doce"
+    }
+  ],
+  "receitasSalgadas": [
+    {
+      "id": 1,
+      "titulo": "Torta de Frango",
+      "descricao": "Torta cremosa de frango",
+      "ingredientes": ["Frango", "Farinha", "Ovos", "Leite", "Milho"],
+      "modoPreparo": "Misture e asse por 30 minutos.",
+      "categoria": "salgada"
+    },
+    {
+      "id": 2,
+      "titulo": "Quiche de Queijo",
+      "descricao": "Quiche francesa de queijo",
+      "ingredientes": ["Queijo", "Ovos", "Creme de leite", "Farinha"],
+      "modoPreparo": "Asse por 35 minutos.",
+      "categoria": "salgada"
+    },
+    {
+      "id": 3,
+      "titulo": "Escondidinho de Carne",
+      "descricao": "Escondidinho com purê de batata e carne",
+      "ingredientes": ["Batata", "Carne moída", "Leite", "Manteiga", "Queijo"],
+      "modoPreparo": "Monte camadas e asse até gratinar.",
+      "categoria": "salgada"
+    }
+  ],
+  "receitasBebidas": [
+    {
+      "id": 1,
+      "titulo": "Suco de Laranja",
+      "descricao": "Suco natural de laranja",
+      "ingredientes": ["Laranja", "Água", "Açúcar"],
+      "modoPreparo": "Esprema as laranjas, misture com água e açúcar.",
+      "categoria": "bebida"
+    },
+    {
+      "id": 2,
+      "titulo": "Vitamina de Banana",
+      "descricao": "Bebida nutritiva de banana",
+      "ingredientes": ["Banana", "Leite", "Aveia", "Mel"],
+      "modoPreparo": "Bata tudo no liquidificador.",
+      "categoria": "bebida"
+    },
+    {
+      "id": 3,
+      "titulo": "Chá de Camomila",
+      "descricao": "Chá relaxante de camomila",
+      "ingredientes": ["Camomila", "Água", "Mel"],
+      "modoPreparo": "Ferva a água, adicione camomila e mel.",
+      "categoria": "bebida"
+    }
+  ]
+}
+
