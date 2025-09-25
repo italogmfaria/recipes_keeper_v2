@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/receitas_viewmodel.dart';
-import '../views/detalhes_view.dart';
 import 'receita_card.dart';
 
 class CategoriaTabs extends StatelessWidget {
@@ -43,12 +42,6 @@ class CategoriaTabs extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: ReceitaCard(
             receita: receita,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => DetalhesView(receita: receita),
-              ),
-            ),
           ),
         );
       },

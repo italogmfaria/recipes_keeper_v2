@@ -7,6 +7,7 @@ class Receita {
   final List<String> ingredientes;
   final String modoPreparo;
   final String categoria;
+  final bool isFavorite;
 
   Receita({
     required this.id,
@@ -15,7 +16,28 @@ class Receita {
     required this.ingredientes,
     required this.modoPreparo,
     required this.categoria,
+    this.isFavorite = false,
   });
+
+  Receita copyWith({
+    int? id,
+    String? titulo,
+    String? descricao,
+    List<String>? ingredientes,
+    String? modoPreparo,
+    String? categoria,
+    bool? isFavorite,
+  }) {
+    return Receita(
+      id: id ?? this.id,
+      titulo: titulo ?? this.titulo,
+      descricao: descricao ?? this.descricao,
+      ingredientes: ingredientes ?? this.ingredientes,
+      modoPreparo: modoPreparo ?? this.modoPreparo,
+      categoria: categoria ?? this.categoria,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 
   factory Receita.fromJson(Map<String, dynamic> json) {
     return Receita(
@@ -25,6 +47,7 @@ class Receita {
       ingredientes: List<String>.from(json['ingredientes']),
       modoPreparo: json['modoPreparo'],
       categoria: json['categoria'],
+      isFavorite: json['isFavorite'] ?? false,
     );
   }
 
@@ -35,5 +58,6 @@ class Receita {
     'ingredientes': ingredientes,
     'modoPreparo': modoPreparo,
     'categoria': categoria,
+    'isFavorite': isFavorite,
   };
 }

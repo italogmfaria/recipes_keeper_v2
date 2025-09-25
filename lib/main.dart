@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'models/receita.dart';
+import 'views/detalhes_view.dart';
 import 'views/home_view.dart';
 import 'viewmodels/receitas_viewmodel.dart';
+import 'views/settings_view.dart';
+import 'views/sobre_view.dart';
 
 void main() {
   runApp(
@@ -12,19 +16,14 @@ void main() {
   );
 }
 
-class RecipesKeeperApp extends StatefulWidget {
+class RecipesKeeperApp extends StatelessWidget {
   const RecipesKeeperApp({super.key});
 
-  @override
-  State<RecipesKeeperApp> createState() => _RecipesKeeperAppState();
-}
-
-class _RecipesKeeperAppState extends State<RecipesKeeperApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Receitas Keeper',
+      title: 'Recipes Keeper',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.light(
@@ -56,7 +55,33 @@ class _RecipesKeeperAppState extends State<RecipesKeeperApp> {
           elevation: 8,
         ),
       ),
-      home: const HomeView(),
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            final initialIndex = settings.arguments as int? ?? 0;
+            return MaterialPageRoute(
+              builder: (_) => HomeView(initialIndex: initialIndex),
+            );
+          case '/detalhes':
+            final receita = settings.arguments as Receita;
+            return MaterialPageRoute(
+              builder: (_) => DetalhesView(receita: receita),
+            );
+          case '/settings':
+            return MaterialPageRoute(
+              builder: (_) => SettingsView(),
+            );
+          case '/sobre':
+            return MaterialPageRoute(
+              builder: (_) => SobreView(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (_) => const HomeView(initialIndex: 0),
+            );
+        }
+      },
     );
   }
 }

@@ -1,50 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/receita.dart';
+import '../viewmodels/receitas_viewmodel.dart';
 
-class DetalhesView extends StatefulWidget {
+class DetalhesView extends StatelessWidget {
   final Receita receita;
   const DetalhesView({super.key, required this.receita});
 
   @override
-  State<DetalhesView> createState() => _DetalhesViewState();
-}
-
-class _DetalhesViewState extends State<DetalhesView> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.receita.titulo),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.cyan.shade50,
-              Colors.white,
-            ],
+    return Consumer<ReceitasViewModel>(
+      builder: (context, viewModel, child) {
+        final allRecipes = [...viewModel.doces, ...viewModel.salgadas, ...viewModel.bebidas];
+        final currentRecipe = allRecipes.firstWhere(
+          (r) => r.id == receita.id && r.categoria == receita.categoria,
+          orElse: () => receita, // Fallback to the initial recipe
+        );
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Detalhes da Receita'),
           ),
-        ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 24),
-              _buildIngredientes(),
-              const SizedBox(height: 24),
-              _buildModoPreparo(),
-            ],
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.cyan.shade50,
+                  Colors.white,
+                ],
+              ),
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(context, currentRecipe, viewModel),
+                  const SizedBox(height: 24),
+                  _buildIngredientes(context, currentRecipe),
+                  const SizedBox(height: 24),
+                  _buildModoPreparo(context, currentRecipe),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context, Receita receita, ReceitasViewModel viewModel) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -62,11 +69,36 @@ class _DetalhesViewState extends State<DetalhesView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  receita.titulo,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.cyan.shade800,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  receita.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: receita.isFavorite ? Colors.red.shade400 : Colors.grey,
+                ),
+                onPressed: () {
+                  viewModel.toggleFavorito(receita);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
             children: [
               Icon(
-                _getCategoryIcon(widget.receita.categoria),
+                _getCategoryIcon(receita.categoria),
                 color: Colors.cyan,
-                size: 32,
+                size: 22,
               ),
               const SizedBox(width: 12),
               Container(
@@ -79,10 +111,11 @@ class _DetalhesViewState extends State<DetalhesView> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  widget.receita.categoria.toUpperCase(),
+                  receita.categoria.toUpperCase(),
                   style: TextStyle(
                     color: Colors.cyan.shade800,
                     fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 ),
               ),
@@ -90,7 +123,7 @@ class _DetalhesViewState extends State<DetalhesView> {
           ),
           const SizedBox(height: 16),
           Text(
-            widget.receita.descricao,
+            receita.descricao,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Colors.grey.shade700,
                   height: 1.4,
@@ -101,7 +134,7 @@ class _DetalhesViewState extends State<DetalhesView> {
     );
   }
 
-  Widget _buildIngredientes() {
+  Widget _buildIngredientes(BuildContext context, Receita receita) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -132,7 +165,7 @@ class _DetalhesViewState extends State<DetalhesView> {
             ],
           ),
           const SizedBox(height: 16),
-          ...widget.receita.ingredientes.map((ingrediente) => Padding(
+          ...receita.ingredientes.map((ingrediente) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   children: [
@@ -142,11 +175,13 @@ class _DetalhesViewState extends State<DetalhesView> {
                       color: Colors.cyan.shade300,
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      ingrediente,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey.shade700,
-                          ),
+                    Expanded(
+                      child: Text(
+                        ingrediente,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey.shade700,
+                            ),
+                      ),
                     ),
                   ],
                 ),
@@ -156,7 +191,7 @@ class _DetalhesViewState extends State<DetalhesView> {
     );
   }
 
-  Widget _buildModoPreparo() {
+  Widget _buildModoPreparo(BuildContext context, Receita receita) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -188,7 +223,7 @@ class _DetalhesViewState extends State<DetalhesView> {
           ),
           const SizedBox(height: 16),
           Text(
-            widget.receita.modoPreparo,
+            receita.modoPreparo,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey.shade700,
                   height: 1.6,

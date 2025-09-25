@@ -3,30 +3,41 @@ import 'package:provider/provider.dart';
 import '../shared/app_drawer.dart';
 import '../widgets/categoria_tabs.dart';
 import '../viewmodels/receitas_viewmodel.dart';
+import 'favoritos_view.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final int initialIndex;
+
+  const HomeView({super.key, this.initialIndex = 0});
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initialIndex;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ReceitasViewModel>().carregarReceitas();
     });
+  }
+
+  Widget _buildBody() {
+    if (_selectedIndex == 3) {
+      return const FavoritosView();
+    }
+    return CategoriaTabs(selectedIndex: _selectedIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Receitas Keeper'),
+        title: const Text('Recipes Keeper'),
         elevation: 2,
       ),
       drawer: const AppDrawer(),
@@ -62,12 +73,13 @@ class _HomeViewState extends State<HomeView> {
             );
           }
 
-          return CategoriaTabs(selectedIndex: _selectedIndex);
+          return _buildBody();
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
@@ -85,6 +97,10 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.local_drink),
             label: 'Bebidas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
           ),
         ],
       ),

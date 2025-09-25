@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../views/settings_view.dart';
-import '../views/sobre_view.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -43,7 +41,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'Receitas Keeper',
+                      'Recipes Keeper',
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -53,6 +51,42 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
             ),
+            ListTile(
+              leading: Icon(
+                Icons.home,
+                color: Colors.cyan.shade700,
+              ),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  color: Colors.cyan.shade900,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+              },
+            ),
+            Divider(color: Colors.cyan.shade100),
+            ListTile(
+              leading: Icon(
+                Icons.favorite,
+                color: Colors.cyan.shade700,
+              ),
+              title: Text(
+                'Favoritos',
+                style: TextStyle(
+                  color: Colors.cyan.shade900,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false, arguments: 3);
+              },
+            ),
+            Divider(color: Colors.cyan.shade100),
             ListTile(
               leading: Icon(
                 Icons.settings,
@@ -67,10 +101,7 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SettingsView()),
-                );
+                Navigator.pushNamed(context, '/settings');
               },
             ),
             Divider(color: Colors.cyan.shade100),
@@ -88,10 +119,7 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SobreView()),
-                );
+                Navigator.pushNamed(context, '/sobre');
               },
             ),
             Divider(color: Colors.cyan.shade100),

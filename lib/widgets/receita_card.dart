@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/receita.dart';
+import '../viewmodels/receitas_viewmodel.dart';
 
-class ReceitaCard extends StatefulWidget {
+class ReceitaCard extends StatelessWidget {
   final Receita receita;
-  final VoidCallback onTap;
 
-  const ReceitaCard({
-    super.key,
-    required this.receita,
-    required this.onTap,
-  });
+  const ReceitaCard({super.key, required this.receita});
 
-  @override
-  State<ReceitaCard> createState() => _ReceitaCardState();
-}
-
-class _ReceitaCardState extends State<ReceitaCard> {
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<ReceitasViewModel>(context);
+
     return Card(
       child: InkWell(
-        onTap: widget.onTap,
+        onTap: () {
+          Navigator.pushNamed(context, '/detalhes', arguments: receita);
+        },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
@@ -39,30 +35,47 @@ class _ReceitaCardState extends State<ReceitaCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      _getCategoryIcon(widget.receita.categoria),
+                      _getCategoryIcon(receita.categoria),
                       color: Theme.of(context).colorScheme.primary,
                       size: 28,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        widget.receita.titulo,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Colors.cyan.shade800,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          receita.titulo,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: Colors.cyan.shade800,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                       ),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      icon: Icon(
+                        receita.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: receita.isFavorite ? Colors.red.shade400 : Colors.grey,
+                      ),
+                      onPressed: () {
+                        viewModel.toggleFavorito(receita);
+                      },
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  widget.receita.descricao,
+                  receita.descricao,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey.shade700,
-                  ),
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -77,7 +90,7 @@ class _ReceitaCardState extends State<ReceitaCard> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '${widget.receita.ingredientes.length} ingredientes',
+                          '${receita.ingredientes.length} ingredientes',
                           style: TextStyle(
                             color: Colors.cyan.shade300,
                             fontWeight: FontWeight.w500,
@@ -95,7 +108,7 @@ class _ReceitaCardState extends State<ReceitaCard> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        widget.receita.categoria.toUpperCase(),
+                        receita.categoria.toUpperCase(),
                         style: TextStyle(
                           color: Colors.cyan.shade700,
                           fontSize: 12,
