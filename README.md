@@ -1,20 +1,97 @@
-# recipes_keeper
-Atividade 4 da Matéria de Programação Avançada II
+# Recipes Keeper
 
-App de Receitas Favoritas
-Objetivo:
+O Recipes Keeper é um aplicativo Flutter desenvolvido para ajudar os usuários a gerenciar e organizar suas receitas favoritas. O aplicativo permite que os usuários naveguem por receitas por categoria, visualizem instruções detalhadas e marquem suas favoritas para acesso rápido.
 
-Desenvolver um aplicativo Flutter para gerenciar receitas, aplicando a navegação por abas e entre telas
+Este projeto foi desenvolvido como uma atividade para a disciplina de Programação Avançada II, com foco na implementação de conceitos-chave do Flutter, como navegação por abas, gerenciamento de estado e padrões de arquitetura.
 
-Metodologia do app:
-Imagine que você está criando um aplicativo de receitas. A experiência do usuário deve ser intuitiva, permitindo que ele explore diferentes categorias de pratos e salve seus favoritos.
+## Principais Funcionalidades
 
-Seu aplicativo precisa de uma tela principal que sirva como um ponto de partida. Nesta tela, o usuário terá acesso a três categorias principais de receitas: Doces, Salgadas e Bebidas. A transição entre essas categorias deve ser fluida, usando abas que ficam visíveis na parte inferior da tela.
+-   **Navegação por Categoria:** As receitas são organizadas em três categorias principais: Doces, Salgadas e Bebidas.
+-   **Navegação por Abas:** Uma barra de navegação inferior amigável permite a troca fácil entre as categorias de receitas e a seção de favoritos.
+-   **Visualização Detalhada da Receita:** Tocar em um card de receita abre uma visualização detalhada com descrição, ingredientes e modo de preparo.
+-   **Receitas Favoritas:** Os usuários podem marcar qualquer receita como favorita, que aparecerá em uma aba dedicada de "Favoritos".
+-   **Menu Lateral (Drawer):** Um menu lateral fornece acesso a seções adicionais do aplicativo, como "Configurações" e "Sobre".
 
-Cada aba (Doces, Salgadas e Bebidas) mostrará uma seleção de três receitas. Cada receita será representada por um Card que, ao ser tocado, levará o usuário para uma nova tela com os detalhes completos daquele prato.
+## Arquitetura: MVVM (Model-View-ViewModel)
 
-Detalhes sobre Card: https://api.flutter.dev/flutter/material/Card-class.html
+O projeto foi estruturado seguindo a arquitetura **MVVM (Model-View-ViewModel)** para garantir uma separação clara de responsabilidades, tornando a base de código mais escalável, manutenível e testável.
 
-Ao chegar na tela de detalhes, o usuário deve encontrar o título da receita e, abaixo, uma breve descrição, lista de ingredientes e o modo de preparo. A partir daqui, ele terá a opção de voltar para a tela principal, retornando exatamente à aba de onde partiu.
+### Model (Modelo)
 
-Para completar a experiência, o aplicativo deve ter um menu lateral, o Drawer, acessível por um ícone de menu no canto superior. Esse menu não é para navegação entre receitas, mas sim para funções gerais do aplicativo. Ele deve conter ícones para 'Configurações' e 'Sobre', que, ao serem clicados, levam o usuário para telas que exibem informações. Para voltar à tela principal com as abas, você deve usar a seta de "voltar" e/ou o botão de "voltar" do seu dispositivo.
+O Modelo representa os dados e a lógica de negócio da aplicação.
+
+-   **`lib/models/receita.dart`**: Define a classe `Receita`, que é a estrutura de dados para uma receita, incluindo campos como `id`, `titulo`, `descricao`, `ingredientes`, `modoPreparo`, `categoria` e `isFavorite`.
+
+### View (Visão)
+
+A Visão é responsável pela interface do usuário (UI) e por exibir os dados ao usuário. Ela observa o ViewModel em busca de mudanças de estado e se atualiza de acordo.
+
+-   **`lib/views/home_view.dart`**: A tela principal do aplicativo, que contém a `BottomNavigationBar` e hospeda as abas de categoria e a visão de favoritos.
+-   **`lib/views/detalhes_view.dart`**: Exibe os detalhes completos de uma receita selecionada.
+-   **`lib/views/favoritos_view.dart`**: Mostra uma lista de todas as receitas que foram marcadas como favoritas.
+-   **`lib/widgets/`**: Contém componentes de UI reutilizáveis, como `ReceitaCard` e `CategoriaTabs`.
+
+### ViewModel
+
+O ViewModel atua como uma ponte entre o Modelo e a Visão. Ele detém o estado da aplicação e a lógica de negócio, expondo os dados para a Visão e tratando as interações do usuário.
+
+-   **`lib/viewmodels/receitas_viewmodel.dart`**: Este é o núcleo da implementação do MVVM.
+    -   Utiliza `ChangeNotifier` para notificar a UI sobre quaisquer mudanças de estado.
+    -   A UI é conectada a este ViewModel usando o pacote `provider`, que escuta as mudanças e reconstrói os widgets relevantes.
+    -   Ele busca os dados do `ReceitasService` e os prepara para exibição na Visão.
+    -   Contém a lógica para alternar o status de favorito de uma receita (`toggleFavorito`).
+
+### Service (Serviço)
+
+Para separar ainda mais as responsabilidades, uma camada de serviço é usada para lidar com a busca de dados.
+
+-   **`lib/services/receitas_service.dart`**: Responsável por carregar os dados das receitas do arquivo local `assets/db.json`. Isso abstrai a fonte de dados do ViewModel.
+
+## Estrutura do Projeto
+
+```
+lib/
+├── models/
+│   └── receita.dart
+├── services/
+│   └── receitas_service.dart
+├── shared/
+│   └── app_drawer.dart
+├── viewmodels/
+│   └── receitas_viewmodel.dart
+├── views/
+│   ├── detalhes_view.dart
+│   ├── favoritos_view.dart
+│   ├── home_view.dart
+│   ├── settings_view.dart
+│   └── sobre_view.dart
+├── widgets/
+│   ├── categoria_tabs.dart
+│   └── receita_card.dart
+├── main.dart
+assets/
+└── db.json
+```
+
+## Dependências
+
+-   **`provider`**: Usado para o gerenciamento de estado e para implementar a conexão entre o ViewModel e a Visão.
+
+## Como Executar o Projeto
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone <repository-url>
+    ```
+2.  **Navegue até o diretório do projeto:**
+    ```bash
+    cd recipes_keeper
+    ```
+3.  **Instale as dependências:**
+    ```bash
+    flutter pub get
+    ```
+4.  **Execute o aplicativo:**
+    ```bash
+    flutter run
+    ```
