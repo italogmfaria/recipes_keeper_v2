@@ -76,6 +76,10 @@ class _HomeViewState extends State<HomeView> {
           return _buildBody();
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/editar'),
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).primaryColor,

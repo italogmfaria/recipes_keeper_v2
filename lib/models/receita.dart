@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Receita {
   final int id;
   final String titulo;
@@ -8,6 +6,7 @@ class Receita {
   final String modoPreparo;
   final String categoria;
   final bool isFavorite;
+  final String? imagem;
 
   Receita({
     required this.id,
@@ -17,6 +16,7 @@ class Receita {
     required this.modoPreparo,
     required this.categoria,
     this.isFavorite = false,
+    this.imagem,
   });
 
   Receita copyWith({
@@ -27,6 +27,7 @@ class Receita {
     String? modoPreparo,
     String? categoria,
     bool? isFavorite,
+    String? imagem,
   }) {
     return Receita(
       id: id ?? this.id,
@@ -36,6 +37,7 @@ class Receita {
       modoPreparo: modoPreparo ?? this.modoPreparo,
       categoria: categoria ?? this.categoria,
       isFavorite: isFavorite ?? this.isFavorite,
+      imagem: imagem ?? this.imagem,
     );
   }
 
@@ -48,6 +50,7 @@ class Receita {
       modoPreparo: json['modoPreparo'],
       categoria: json['categoria'],
       isFavorite: json['isFavorite'] ?? false,
+      imagem: json['imagem'] != null ? json['imagem'] as String : null,
     );
   }
 
@@ -59,5 +62,6 @@ class Receita {
     'modoPreparo': modoPreparo,
     'categoria': categoria,
     'isFavorite': isFavorite,
+    'imagem': imagem,
   };
 }

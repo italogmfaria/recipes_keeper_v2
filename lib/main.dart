@@ -6,6 +6,7 @@ import 'views/home_view.dart';
 import 'viewmodels/receitas_viewmodel.dart';
 import 'views/settings_view.dart';
 import 'views/sobre_view.dart';
+import 'views/editar_view.dart';
 
 void main() {
   runApp(
@@ -67,6 +68,11 @@ class RecipesKeeperApp extends StatelessWidget {
             final receita = settings.arguments as Receita;
             return MaterialPageRoute(
               builder: (_) => DetalhesView(receita: receita),
+            );
+          case '/editar':
+            final receita = settings.arguments as Receita?;
+            return MaterialPageRoute(
+              builder: (_) => EditarView(receita: receita),
             );
           case '/settings':
             return MaterialPageRoute(
